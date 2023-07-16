@@ -8,7 +8,7 @@ import (
 
 func Load() (map[string]bool, error) {
 	words := map[string]bool{}
-	file, err := os.Open("words.txt")
+	file, err := os.Open("wordList.txt")
 	if err != nil {
 		return nil, err
 	}

@@ -1,4 +1,4 @@
-# squaredle-solver
+# Squaredle solver
 Finds words for https://squaredle.app/
 
 Works with any rectangle grids. English letters only.

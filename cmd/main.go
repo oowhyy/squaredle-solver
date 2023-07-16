@@ -75,7 +75,7 @@ func (s *Solver) Solve(grid [][]byte, res map[string]bool) {
 }
 
 func (s *Solver) solveOne(grid [][]byte, x, y int, pref []byte, res map[string]bool) {
-	if x >= len(grid) || y >= len(grid[0]) || x < 0 || y < 0 || grid[y][x] == '*' {
+	if x >= len(grid[0]) || y >= len(grid) || x < 0 || y < 0 || grid[y][x] == '*' {
 		return
 	}
 	curWord := append(pref, grid[y][x])

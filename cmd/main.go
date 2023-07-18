@@ -6,24 +6,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/oowhyy/squaredle-solver/internal/words"
+	"github.com/oowhyy/squaredle-solver/internal/solver"
 )
-
-type Solver struct {
-	wordList map[string]bool
-	dirs     [][]int
-}
-
-func NewSolver() *Solver {
-	wrds, err := words.Load()
-	if err != nil {
-		log.Fatal("unable to load words", err)
-	}
-	return &Solver{
-		wordList: wrds,
-		dirs:     [][]int{{1, 0}, {1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}},
-	}
-}
 
 func main() {
 	file, err := os.ReadFile("input.txt")
@@ -45,16 +29,17 @@ func main() {
 	for i := 0; i < n; i++ {
 		grid[i] = []byte(lines[i])
 	}
-	solver := NewSolver()
+	solver := solver.NewSolver()
+	// solve find
 	res := map[string]bool{}
-	// solve
-	solver.Solve(grid, res)
+	solver.Find(grid, res)
 	// sort
 	resList := make([]string, 0)
 	for w := range res {
 		resList = append(resList, w)
 	}
 	sort.Strings(resList)
+	sort.SliceStable(resList, func(i, j int) bool { return len(resList[i]) < len(resList[j]) })
 	out, err := os.Create("output.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -64,28 +49,4 @@ func main() {
 		out.WriteString(word + "\n")
 	}
 	log.Println("done")
-}
-
-func (s *Solver) Solve(grid [][]byte, res map[string]bool) {
-	for i := 0; i < len(grid); i++ {
-		for j := 0; j < len(grid[0]); j++ {
-			s.solveOne(grid, j, i, []byte{}, res)
-		}
-	}
-}
-
-func (s *Solver) solveOne(grid [][]byte, x, y int, pref []byte, res map[string]bool) {
-	if x >= len(grid[0]) || y >= len(grid) || x < 0 || y < 0 || grid[y][x] == '*' {
-		return
-	}
-	curWord := append(pref, grid[y][x])
-	if len(curWord) >= 4 && s.wordList[string(curWord)] {
-		res[string(curWord)] = true
-	}
-	repair := grid[y][x]
-	grid[y][x] = '*'
-	for _, dir := range s.dirs {
-		s.solveOne(grid, x+dir[0], y+dir[1], curWord, res)
-	}
-	grid[y][x] = repair
 }

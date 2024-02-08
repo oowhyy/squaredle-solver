@@ -10,25 +10,7 @@ import (
 )
 
 func main() {
-	file, err := os.ReadFile("input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	lines := strings.Fields(string(file))
-	if len(lines) == 0 {
-		log.Fatal("empty input")
-	}
-	m := len(lines[0])
-	for _, line := range lines {
-		if len(line) != m {
-			log.Fatal("lines must be all equal length")
-		}
-	}
-	n := len(lines)
-	grid := make([][]byte, n)
-	for i := 0; i < n; i++ {
-		grid[i] = []byte(lines[i])
-	}
+	grid := loadInput()
 	solver := solver.NewSolver()
 	// solve find
 	res := map[string]bool{}
@@ -49,4 +31,27 @@ func main() {
 		out.WriteString(word + "\n")
 	}
 	log.Println("done")
+}
+
+func loadInput() [][]byte {
+	file, err := os.ReadFile("input.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	lines := strings.Fields(string(file))
+	if len(lines) == 0 {
+		log.Fatal("empty input")
+	}
+	m := len(lines[0])
+	for _, line := range lines {
+		if len(line) != m {
+			log.Fatal("lines must be all equal length")
+		}
+	}
+	n := len(lines)
+	grid := make([][]byte, n)
+	for i := 0; i < n; i++ {
+		grid[i] = []byte(lines[i])
+	}
+	return grid
 }

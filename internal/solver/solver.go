@@ -48,6 +48,7 @@ func (s *Solver) solveOne(grid [][]byte, x, y int, pref []byte, res map[string]b
 }
 
 // find words from wordList in grid
+// find word for each word in dictionary - works FASTER than solve
 func (s *Solver) Find(grid [][]byte, res map[string]bool) {
 	for w := range s.wordList {
 		if len(w) < 4 {
